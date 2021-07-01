@@ -8,14 +8,14 @@ public:
         int begin   = 0;
         for(int i=0; i<size && (size-i)>max_len; ++i){
             for(int j=i+1; j<size; ++j){
-                if((j-i+1)>=max_len && check(s.substr(i,j))){
+                if((j-i+1)>max_len && check(s.substr(i,j-i+1))){
                     max_len = j-i+1;
                     begin   = i;
                 }
             }
         }
 
-        return s.substr(begin,begin+max_len-1);
+        return s.substr(begin,max_len);
     }
     bool check(string s){
         int size = s.size();
@@ -39,7 +39,7 @@ public:
         if(size == 1 || check(s)) return s;
 
         string sub0 = longestPalindrome(s.substr(0,size-1));
-        string sub1 = longestPalindrome(s.substr(1,size));
+        string sub1 = longestPalindrome(s.substr(1,size-1));
 
         return sub0.size()>=sub1.size()?sub0:sub1;
     }
