@@ -56,3 +56,62 @@ public:
         return true;
     }
 };
+
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        size = len(s)
+        if size == 1 or self.check(s):
+            return s
+        
+        max_len = 1
+        begin   = 0
+        for i in range(size):
+            if size-i <= max_len:
+                break
+            for j in range(i+1,size):
+                if (j-i+1)>max_len and self.check(s[i:j+1]):
+                    max_len = j-i+1
+                    begin   = i
+        return s[begin:(max_len+begin)]
+        
+
+    def check(self,s:str):
+        size = len(s)
+        if size<=1:
+            return True
+
+        begin = 0
+        tail  = size-1
+        while begin<tail:
+            if s[begin] != s[tail]:
+                return False
+            begin += 1
+            tail  -= 1
+        return True
+        
+        
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        size = len(s)
+        if size == 1 or self.check(s):
+            return s
+        
+        s0 = self.longestPalindrome(s[0:(size-1)])
+        s1 = self.longestPalindrome(s[1:size])
+
+        return s0 if len(s0)>=len(s1) else s1 
+        
+
+    def check(self,s:str):
+        size = len(s)
+        if size<=1:
+            return True
+
+        begin = 0
+        tail  = size-1
+        while begin<tail:
+            if s[begin] != s[tail]:
+                return False
+            begin += 1
+            tail  -= 1
+        return True
