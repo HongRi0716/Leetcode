@@ -1,0 +1,36 @@
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int len1 = nums1.size(), len2 = nums2.size(), half = (len1 + len2) / 2;
+        int i = 0, j = 0, count = 0; // i、j分别是nums1、nums2的右段起点，同时也是左段长度。
+
+        // 找到两个右段起点的正确位置，使得两个左段的总长度等于half，
+        // 且保证两个左段中的每个数（如果有的话）均不大于两个右段中的每个数（如果有的话）。
+        while (i < len1 && j < len2 && count < half) {
+            if (nums1[i] <= nums2[j])
+                ++i;
+            else
+                ++j;
+            ++count;
+        }
+        while (count < half && i < len1) {
+            ++i;
+            ++count;
+        }
+        while (count < half && j < len2) {
+            ++j;
+            ++count;
+        }
+
+        // 先从(i - 1)、(j - 1)两个左段终点中选一个合法的（未越左边界的）且较大的数作为左候选。
+        int left = max(i == 0 ? INT_MIN : nums1[i - 1], j == 0 ? INT_MIN : nums2[j - 1]);
+        // 再从i、j两个右段起点中选一个合法的（未越右边界的）且较小的数作为右候选。
+        int right = min(i == len1 ? INT_MAX : nums1[i], j == len2 ? INT_MAX : nums2[j]);
+        // 如果两个数组的总长度为奇数，即(2 * half + 1)，
+        // 则两个左段的总长度(i + j)比两个右段的总长度(len1 - i + len2 - j)还短一个数，
+        // 这个数就是中位数，也就是右候选本身。
+        // 否则，两个数组的总长度为偶数，即(2 * half)，两个左段的总长度等于两个右段的总长度，
+        // 中位数由左候选和右候选两者求平均值产生。
+        return (len1 + len2) % 2 == 1 ? right * 1.0 : (left + right) / 2.0;
+    }
+};
